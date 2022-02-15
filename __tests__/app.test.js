@@ -39,9 +39,10 @@ describe("app",()=>{
     describe("GET /api/articles/:article_id",()=>{
         test("responds with an article object with appropriate properties", ()=>{
             return request(app).get('/api/articles/9')
-            .then(({body:{article}})=>{
+            // .then(({body:{article}})=>{
                 
-                     })
+            //          })
             })
     })
 })
+
