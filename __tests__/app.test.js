@@ -34,4 +34,27 @@ describe("app",()=>{
 
             })
         })
+
+    describe("PATCH /api/articles/:article_id",()=>{
+        test("status 200 - responds with updated article",()=>{
+            const voteUpdate = {inc_votes: 101 };
+            return request(app)
+            .patch('/api/articles/12')
+            .send(voteUpdate)
+            .expect(200)
+            .then(body=>{
+                expect(body).toEqual({
+                    article_id:12,
+                    title:`Moustache`,
+                    topic: `mitch`,
+                    author: `butter_bridge`,
+                    body:`Have you seen the size of that thing?`,
+                    created_at: `2020-10-11 12:24:00`,
+                    votes: 101
+                })
+            })
+        })
+    })
+
+
     })
