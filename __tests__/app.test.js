@@ -31,7 +31,28 @@ describe("app",()=>{
         test("status 404 - path not found", ()=>{
             return request(app).get('/bad-pathway')
             .expect(404)
-
-            })
+            .then(({body})=>{
+                expect(body.msg).toEqual("Path not found")})
         })
     })
+    
+    describe("GET /api/articles/:article_id",()=>{
+        test("status 200 - responds with an article object with appropriate properties", ()=>{
+            return request(app).get('/api/articles/9')
+            .expect(200)
+            .then(({body})=>{
+             //   console.log(body)
+                expect(body).toEqual({
+                    article_id: 9,
+                    title: "They're not exactly dogs, are they?",
+                    topic: "mitch",
+                    author: "butter_bridge",
+                    body: "Well? Think about it.",
+                    created_at: "2020-06-06T09:10:00.000Z",
+                    votes: 0
+                })
+                      })
+            })
+    })
+})
+
