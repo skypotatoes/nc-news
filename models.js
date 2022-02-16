@@ -1,28 +1,31 @@
 const db = require('./db/connection')
 
-exports.fetchTopics = ()=>{
-    return db.query(`
+exports.fetchTopics = () => {
+  return db
+    .query(
+      `
     SELECT slug, description FROM topics
-    `).then(results=>{
-        return results.rows
+    `,
+    )
+    .then((results) => {
+      return results.rows
     })
 }
 
-exports.changeVotes = (newVotes, id)=>{
-    console.log("You are here inside changeVotes")
-    db.query('SELECT votes FROM articles WHERE article_id=$1',[id])
-    .then(result => result.rows[0].votes)
-    .then(currentVotes=> currentVotes+newVotes)
-    .then(totalVotes=>{
-        console.log(totalVotes)
-        //goes wrong on the next line>> "Error: Cannot use a pool after calling end on the pool"
-        return db.query(`
+exports.changeVotes = (newVotes, id) => {
+  //  console.log('You are here inside changeVotes')
+  return db
+    .query(
+      `
         UPDATE articles 
-        SET votes = ${totalVotes}
-        WHERE article_id = $1
+        SET votes = votes + $1
+        WHERE article_id = $2
         RETURNING *;
-        `,[id])//database query to update votes for the relevant article
-    }).catch(err => console.log(err))
-    
-    
+        `,
+      [newVotes, id],
+    ) //database query to update votes for the relevant article
+    .then((result) => {
+      //console.log(result.rows)
+      return result.rows
+    })
 }
