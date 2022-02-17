@@ -1,4 +1,7 @@
-const {fetchTopics, fetchArticleById, changeVotes} = require('./models')
+
+
+const {fetchTopics, fetchArticleById, changeVotes,fetchUsers} = require('./models')
+
 
 exports.getTopics = (req, res, next) => {
   fetchTopics()
@@ -7,6 +10,14 @@ exports.getTopics = (req, res, next) => {
     })
     .catch(next)
 }
+
+
+exports.getArticleById = (req, res, next) => {
+  const ArticleId = req.params.article_id
+  fetchArticleById(ArticleId)
+    .then((article) => {
+      //        console.log(article[0])
+      res.status(200).send(article[0])
 
 exports.patchVotesByArticleId = (req, res, next) => {
   let votes = req.body.inc_votes
@@ -35,6 +46,15 @@ exports.patchVotesByArticleId = (req, res, next) => {
 }
 
 
+exports.getUsers = (req, res, next) => {
+  fetchUsers()
+    .then((users) => {
+      res.status(200).send(users)
+    })
+    .catch(next)
+}
+
+
 exports.getArticleById = (req, res, next)=>{
     const ArticleId = req.params.article_id
     fetchArticleById(ArticleId)
@@ -44,4 +64,5 @@ exports.getArticleById = (req, res, next)=>{
     })
     .catch(next)
 }
+
 

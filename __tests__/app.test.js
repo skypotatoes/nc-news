@@ -20,10 +20,12 @@ describe('app', () => {
         .then(({ body: { topics } }) => {
           expect(topics).toHaveLength(3)
           topics.forEach((topic) => {
-            expect.objectContaining({
-              description: expect.any(String),
-              slug: expect.any(String),
-            })
+            expect(topic).toEqual(
+              expect.objectContaining({
+                description: expect.any(String),
+                slug: expect.any(String),
+              }),
+            )
           })
         })
     })
@@ -101,6 +103,26 @@ describe('app', () => {
             body: `I find this existence challenging`,
             created_at: `2020-07-09T20:11:00.000Z`,
             votes: 100,
+          })
+        })
+    })
+  })
+
+  describe('GET /api/users', () => {
+    test('status 200 - responds with an array of objects with username property', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body: users }) => {
+          console.log(users)
+          expect(users).toHaveLength(4)
+
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+              }),
+            )
           })
         })
     })
