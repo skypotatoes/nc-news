@@ -30,9 +30,7 @@ exports.fetchUsers = () => {
   `,
     )
     .then((results) => results.rows)
-    })
 }
-
 
 exports.changeVotes = (newVotes, id) => {
   return db
@@ -50,8 +48,12 @@ exports.changeVotes = (newVotes, id) => {
     })
 }
 
-exports.fetchArticleById = (articleID)=>{
-    return db.query(`
-    SELECT * FROM articles WHERE article_id = $1`, [articleID])
-    .then(results=> results.rows)
+exports.fetchArticleById = (articleID) => {
+  return db
+    .query(
+      `
+    SELECT * FROM articles WHERE article_id = $1`,
+      [articleID],
+    )
+    .then((results) => results.rows)
 }
