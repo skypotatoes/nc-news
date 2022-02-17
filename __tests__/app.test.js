@@ -45,7 +45,6 @@ describe('app', () => {
         .get('/api/articles/9')
         .expect(200)
         .then(({ body }) => {
-          //   console.log(body)
           expect(body).toEqual({
             article_id: 9,
             title: "They're not exactly dogs, are they?",
@@ -55,6 +54,23 @@ describe('app', () => {
             created_at: '2020-06-06T09:10:00.000Z',
             votes: 0,
           })
+        })
+    })
+  })
+
+  describe('GET /api/users', () => {
+    test('status 200 - responds with an array of objects with username property', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body }) => {
+          console.log(body.includes({ username: 'icellusedkars' }))
+          expect(body).toEqual([
+            { username: 'butter_bridge' },
+            { username: 'icellusedkars' },
+            { username: 'rogersop' },
+            { username: 'lurker' },
+          ])
         })
     })
   })
