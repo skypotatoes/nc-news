@@ -12,7 +12,6 @@ exports.fetchTopics = () => {
     })
 }
 
-
 exports.changeVotes = (newVotes, id) => {
   return db
     .query(
@@ -29,8 +28,24 @@ exports.changeVotes = (newVotes, id) => {
     })
 }
 
-exports.fetchArticleById = (articleID)=>{
-    return db.query(`
-    SELECT * FROM articles WHERE article_id = $1`, [articleID])
-    .then(results=> results.rows)
+exports.fetchArticleById = (articleID) => {
+  return db
+    .query(
+      `
+    SELECT * FROM articles WHERE article_id = $1`,
+      [articleID],
+    )
+    .then((results) => results.rows)
+}
+
+exports.fetchArticles = () => {
+  return db
+    .query(
+      `
+    SELECT author, title, article_id, topic, created_at, votes FROM articles
+  `,
+    )
+    .then((results) => {
+      return results.rows
+    })
 }

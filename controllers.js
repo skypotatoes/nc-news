@@ -1,4 +1,9 @@
-const {fetchTopics, fetchArticleById, changeVotes} = require('./models')
+const {
+  fetchTopics,
+  fetchArticleById,
+  changeVotes,
+  fetchArticles,
+} = require('./models')
 
 exports.getTopics = (req, res, next) => {
   fetchTopics()
@@ -34,14 +39,20 @@ exports.patchVotesByArticleId = (req, res, next) => {
     .catch(next)
 }
 
-
-exports.getArticleById = (req, res, next)=>{
-    const ArticleId = req.params.article_id
-    fetchArticleById(ArticleId)
-    .then(article=>{
-//        console.log(article[0])
-        res.status(200).send(article[0]);
+exports.getArticleById = (req, res, next) => {
+  const ArticleId = req.params.article_id
+  fetchArticleById(ArticleId)
+    .then((article) => {
+      //        console.log(article[0])
+      res.status(200).send(article[0])
     })
     .catch(next)
 }
 
+exports.getArticles = (req, res, next) => {
+  fetchArticles()
+    .then((articles) => {
+      res.status(200).send({ articles })
+    })
+    .catch(next)
+}
