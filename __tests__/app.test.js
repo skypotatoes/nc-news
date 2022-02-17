@@ -125,15 +125,30 @@ describe('GET /api/articles/:article_id', () => {
       .expect(200)
       .then(({ body }) => {
         //   console.log(body)
-        expect(body).toEqual({
-          article_id: 9,
-          title: "They're not exactly dogs, are they?",
-          topic: 'mitch',
-          author: 'butter_bridge',
-          body: 'Well? Think about it.',
-          created_at: '2020-06-06T09:10:00.000Z',
-          votes: 0,
-        })
+        expect(body).toEqual(
+          expect.objectContaining({
+            article_id: 9,
+            title: "They're not exactly dogs, are they?",
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'Well? Think about it.',
+            created_at: '2020-06-06T09:10:00.000Z',
+            votes: 0,
+          }),
+        )
       })
+  })
+
+  test('status 200 - article response includes comment_count', () => {
+    return request(app)
+      .get('/api/articles/1') //should return comment_count of 11
+      .expect(200)
+      .then(({ body }) =>
+        expect(body).toEqual(
+          expect.objectContaining({
+            comment_count: '11',
+          }),
+        ),
+      )
   })
 })

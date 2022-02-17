@@ -12,7 +12,6 @@ exports.fetchTopics = () => {
     })
 }
 
-
 exports.changeVotes = (newVotes, id) => {
   return db
     .query(
@@ -29,8 +28,17 @@ exports.changeVotes = (newVotes, id) => {
     })
 }
 
-exports.fetchArticleById = (articleID)=>{
-    return db.query(`
-    SELECT * FROM articles WHERE article_id = $1`, [articleID])
-    .then(results=> results.rows)
+exports.fetchArticleById = (articleID) => {
+  return db
+    .query(
+      //    `SELECT * FROM articles WHERE article_id = $1`, [articleID])
+      `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
+  FROM articles 
+  INNER JOIN comments 
+  ON articles.article_id = comments.article_id 
+  WHERE articles.article_id=$1 
+  GROUP BY articles.article_id`,
+      [articleID],
+    )
+    .then((results) => results.rows)
 }
