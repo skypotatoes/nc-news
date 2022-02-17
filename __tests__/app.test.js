@@ -60,7 +60,6 @@ describe('app', () => {
         .send(voteUpdate)
         .expect(400)
         .then((response) => {
-          0
           expect(response.text).toBe('Bad request')
         })
     })
@@ -72,8 +71,37 @@ describe('app', () => {
         .send(voteUpdate)
         .expect(404)
         .then((response) => {
-          0
           expect(response.text).toBe('Path not found')
+        })
+    })
+
+    test('status 400 - bad request when article ID is invalid', () => {
+      const voteUpdate = { inc_votes: 25 }
+      return request(app)
+        .patch('/api/articles/banana')
+        .send(voteUpdate)
+        .expect(400)
+        .then((response) => {
+          expect(response.text).toBe('Bad request')
+        })
+    })
+
+    test('status 200 - no inc_votes value on the request body', () => {
+      const voteUpdate = {}
+      return request(app)
+        .patch('/api/articles/1')
+        .send(voteUpdate)
+        .expect(200)
+        .then((response) => {
+          expect(response.body.article).toEqual({
+            article_id: 1,
+            title: `Living in the shadow of a great man`,
+            topic: `mitch`,
+            author: `butter_bridge`,
+            body: `I find this existence challenging`,
+            created_at: `2020-07-09T20:11:00.000Z`,
+            votes: 100,
+          })
         })
     })
   })

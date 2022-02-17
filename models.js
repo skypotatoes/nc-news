@@ -13,7 +13,6 @@ exports.fetchTopics = () => {
 }
 
 exports.changeVotes = (newVotes, id) => {
-  //  console.log('You are here inside changeVotes')
   return db
     .query(
       `
@@ -23,9 +22,8 @@ exports.changeVotes = (newVotes, id) => {
         RETURNING *;
         `,
       [newVotes, id],
-    ) //database query to update votes for the relevant article
+    )
     .then((result) => {
-      //console.log(result.rows)
       return result.rows
     })
 }
