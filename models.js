@@ -57,3 +57,17 @@ exports.fetchArticleById = (articleID) => {
     )
     .then((results) => results.rows)
 }
+
+exports.fetchCommentsByArticleId = (articleID) => {
+  console.log('You are in the model')
+  return db
+    .query(
+      `
+          SELECT * FROM comments WHERE article_id = $1`,
+      [articleID],
+    )
+    .then((results) => {
+      console.log(results.rows)
+      return results.rows
+    })
+}

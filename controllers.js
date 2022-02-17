@@ -3,6 +3,7 @@ const {
   fetchArticleById,
   changeVotes,
   fetchUsers,
+  fetchCommentsByArticleId,
 } = require('./models')
 
 exports.getTopics = (req, res, next) => {
@@ -63,4 +64,12 @@ exports.getArticleById = (req, res, next) => {
       res.status(200).send(article[0])
     })
     .catch(next)
+}
+
+exports.getCommentsByArticleId = (req, res, next) => {
+  console.log('You are in the controller')
+  const ArticleId = req.params.article_id
+  fetchCommentsByArticleId(ArticleId).then((comments) => {
+    res.status(200).send(comments)
+  })
 }
