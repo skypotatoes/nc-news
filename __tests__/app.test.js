@@ -20,10 +20,12 @@ describe('app', () => {
         .then(({ body: { topics } }) => {
           expect(topics).toHaveLength(3)
           topics.forEach((topic) => {
-            expect.objectContaining({
-              description: expect.any(String),
-              slug: expect.any(String),
-            })
+            expect(topic).toEqual(
+              expect.objectContaining({
+                description: expect.any(String),
+                slug: expect.any(String),
+              }),
+            )
           })
         })
     })
@@ -63,14 +65,17 @@ describe('app', () => {
       return request(app)
         .get('/api/users')
         .expect(200)
-        .then(({ body }) => {
-          console.log(body.includes({ username: 'icellusedkars' }))
-          expect(body).toEqual([
-            { username: 'butter_bridge' },
-            { username: 'icellusedkars' },
-            { username: 'rogersop' },
-            { username: 'lurker' },
-          ])
+        .then(({ body: users }) => {
+          console.log(users)
+          expect(users).toHaveLength(4)
+
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+              }),
+            )
+          })
         })
     })
   })
