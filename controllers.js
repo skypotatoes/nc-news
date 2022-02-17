@@ -13,7 +13,6 @@ exports.patchVotesByArticleId = (req, res, next) => {
   const id = Number(req.params.article_id)
 
   if (typeof votes !== 'number' && votes) {
-    //  console.log('votes was detected as NaN')
     res.status(400).send('Bad request')
   }
 
