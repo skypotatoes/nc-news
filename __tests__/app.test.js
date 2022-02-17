@@ -157,26 +157,4 @@ describe('app', () => {
         })
     })
   })
-
-  describe('GET /api/articles/:article_id/comments', () => {
-    test('status 200 - responds with array of comments with appropriate properties', () => {
-      return request(app)
-        .get('GET /api/articles/1/comments')
-        .expect(200)
-        .then(({ body: comments }) => {
-          expect(comments).toHaveLength(11)
-          comments.forEach((comment) => {
-            expect(comment).toEqual(
-              expect.objectContaining({
-                comment_id: expect.any(Number),
-                votes: expect.any(Number),
-                created_at: expect.any(String),
-                author: expect.any(String),
-                body: expect.any(String),
-              }),
-            )
-          })
-        })
-    })
-  })
 })
