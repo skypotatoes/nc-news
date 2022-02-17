@@ -20,10 +20,12 @@ describe('app', () => {
         .then(({ body: { topics } }) => {
           expect(topics).toHaveLength(3)
           topics.forEach((topic) => {
-            expect.objectContaining({
-              description: expect.any(String),
-              slug: expect.any(String),
-            })
+            expect(topic).toEqual(
+              expect.objectContaining({
+                description: expect.any(String),
+                slug: expect.any(String),
+              }),
+            )
           })
         })
     })
@@ -105,18 +107,37 @@ describe('app', () => {
         })
     })
   })
-})
 
-describe('GET /bad-pathway', () => {
-  test('status 404 - path not found', () => {
-    return request(app)
-      .get('/bad-pathway')
-      .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toEqual('Path not found')
-      })
+  describe('GET /api/users', () => {
+    test('status 200 - responds with an array of objects with username property', () => {
+      return request(app)
+        .get('/api/users')
+        .expect(200)
+        .then(({ body: users }) => {
+          expect(users).toHaveLength(4)
+
+          users.forEach((user) => {
+            expect(user).toEqual(
+              expect.objectContaining({
+                username: expect.any(String),
+              }),
+            )
+          })
+        })
+    })
   })
-})
+
+  describe('GET /bad-pathway', () => {
+    test('status 404 - path not found', () => {
+      return request(app)
+        .get('/bad-pathway')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Path not found')
+        })
+    })
+  })
+
 
 describe('GET /api/articles/:article_id', () => {
   test('status 200 - responds with an article object with appropriate properties', () => {
@@ -137,6 +158,10 @@ describe('GET /api/articles/:article_id', () => {
           }),
         )
       })
+          })
+        })
+    })
+
   })
 
   test('status 200 - article response includes comment_count', () => {
