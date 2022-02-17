@@ -108,6 +108,34 @@ describe('app', () => {
     })
   })
 
+
+  describe('GET /bad-pathway', () => {
+    test('status 404 - path not found', () => {
+      return request(app)
+        .get('/bad-pathway')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Path not found')
+        })
+    })
+  })
+
+  describe('GET /api/articles/:article_id', () => {
+    test('status 200 - responds with an article object with appropriate properties', () => {
+      return request(app)
+        .get('/api/articles/9')
+        .expect(200)
+        .then(({ body }) => {
+          //   console.log(body)
+          expect(body).toEqual({
+            article_id: 9,
+            title: "They're not exactly dogs, are they?",
+            topic: 'mitch',
+            author: 'butter_bridge',
+            body: 'Well? Think about it.',
+            created_at: '2020-06-06T09:10:00.000Z',
+            votes: 0,
+
   describe('GET /api/users', () => {
     test('status 200 - responds with an array of objects with username property', () => {
       return request(app)
@@ -126,6 +154,31 @@ describe('app', () => {
         })
     })
   })
+
+
+  describe('GET /api/articles/', () => {
+    test('status 200 - responds with an articles array of article objects', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeInstanceOf(Array)
+          expect(articles).toHaveLength(12)
+          articles.forEach((article) =>
+            expect(article).toEqual(
+              expect.objectContaining({
+                author: expect.any(String),
+                title: expect.any(String),
+                article_id: expect.any(Number),
+                topic: expect.any(String),
+                created_at: expect.any(String),
+                votes: expect.any(Number),
+              }),
+            ),
+          )
+        })
+    })
 
   describe('GET /bad-pathway', () => {
     test('status 404 - path not found', () => {
@@ -170,5 +223,6 @@ describe('app', () => {
           ),
         )
     })
+
   })
 })
