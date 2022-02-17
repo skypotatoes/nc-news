@@ -1,10 +1,13 @@
 const express = require('express')
 const app = express()
-const {getTopics, patchVotesByArticleId} = require('./controllers')
+
+const {getTopics, patchVotesByArticleId, getArticleById} = require('./controllers')
+
 
 app.use(express.json())
 
 app.get('/api/topics', getTopics)
+app.get('/api/articles/:article_id', getArticleById)
 
 app.patch('/api/articles/:article_id', patchVotesByArticleId)
 

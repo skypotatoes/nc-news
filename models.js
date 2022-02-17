@@ -12,6 +12,7 @@ exports.fetchTopics = () => {
     })
 }
 
+
 exports.changeVotes = (newVotes, id) => {
   return db
     .query(
@@ -26,4 +27,10 @@ exports.changeVotes = (newVotes, id) => {
     .then((result) => {
       return result.rows
     })
+}
+
+exports.fetchArticleById = (articleID)=>{
+    return db.query(`
+    SELECT * FROM articles WHERE article_id = $1`, [articleID])
+    .then(results=> results.rows)
 }
