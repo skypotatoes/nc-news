@@ -57,6 +57,10 @@ exports.fetchArticleById = (articleID) => {
   ON articles.article_id = comments.article_id 
   WHERE articles.article_id=$1 
   GROUP BY articles.article_id`,
+      [articleID],
     )
-    .then((results) => results.rows)
+    .then((results) => {
+      console.log(results)
+      return results.rows
+    })
 }
