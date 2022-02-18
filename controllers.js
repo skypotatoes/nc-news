@@ -28,11 +28,11 @@ exports.patchVotesByArticleId = (req, res, next) => {
   const id = Number(req.params.article_id)
 
   if (typeof votes !== 'number' && votes) {
-    res.status(400).send('Bad request')
+    res.status(400).send({ msg: 'Bad request' })
   }
 
   if (isNaN(id)) {
-    res.status(400).send('Bad request')
+    res.status(400).send({ msg: 'Bad request' })
   }
 
   if (votes === undefined) {
@@ -42,7 +42,7 @@ exports.patchVotesByArticleId = (req, res, next) => {
   changeVotes(votes, id)
     .then((article) => {
       if (article.length === 0) {
-        res.status(404).send('Path not found')
+        res.status(404).send({ msg: 'Path not found' })
       }
       res.status(200).send({ article: article[0] })
     })
