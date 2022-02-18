@@ -82,7 +82,6 @@ exports.getArticleById = (req, res, next) => {
 }
 
 exports.getCommentsByArticleId = (req, res, next) => {
-  console.log('You are in the controller')
   const ArticleId = req.params.article_id
   fetchCommentsByArticleId(ArticleId).then((comments) => {
     res.status(200).send(comments)

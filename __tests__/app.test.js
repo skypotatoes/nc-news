@@ -185,18 +185,18 @@ describe('app', () => {
           )
         })
     })
+  })
 
-    describe('GET /bad-pathway', () => {
-      test('status 404 - path not found', () => {
-        return request(app)
-          .get('/bad-pathway')
-          .expect(404)
-          .then(({ body }) => {
-            expect(body.msg).toEqual('Path not found')
-          })
-      })
+  describe('GET /bad-pathway', () => {
+    test('status 404 - path not found', () => {
+      return request(app)
+        .get('/bad-pathway')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Path not found')
+        })
     })
-
+  })
 
   describe('GET /api/articles/:article_id/comments', () => {
     test('status 200 - responds with array of comments with appropriate properties', () => {
@@ -207,37 +207,49 @@ describe('app', () => {
           expect(comments).toHaveLength(11)
           comments.forEach((comment) => {
             expect(comment).toEqual(
-    describe('GET /api/articles/:article_id', () => {
-      test('status 200 - responds with an article object with appropriate properties', () => {
-        return request(app)
-          .get('/api/articles/9')
-          .expect(200)
-          .then(({ body }) => {
-            expect(body).toEqual(
               expect.objectContaining({
-                article_id: 9,
-                title: "They're not exactly dogs, are they?",
-                topic: 'mitch',
-                author: 'butter_bridge',
-                body: 'Well? Think about it.',
-                created_at: '2020-06-06T09:10:00.000Z',
-                votes: 0,
+                comment_id: expect.any(Number),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
               }),
             )
           })
-      })
-      test('status 200 - article response includes comment_count', () => {
-        return request(app)
-          .get('/api/articles/1') //should return comment_count of 11
-          .expect(200)
-          .then(({ body }) =>
-            expect(body).toEqual(
-              expect.objectContaining({
-                comment_count: '11',
-              }),
-            ),
+        })
+    })
+  })
+
+  describe('GET /api/articles/:article_id', () => {
+    test('status 200 - responds with an article object with appropriate properties', () => {
+      return request(app)
+        .get('/api/articles/9')
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toEqual(
+            expect.objectContaining({
+              article_id: 9,
+              title: "They're not exactly dogs, are they?",
+              topic: 'mitch',
+              author: 'butter_bridge',
+              body: 'Well? Think about it.',
+              created_at: '2020-06-06T09:10:00.000Z',
+              votes: 0,
+            }),
           )
-      })
+        })
+    })
+    test('status 200 - article response includes comment_count', () => {
+      return request(app)
+        .get('/api/articles/1') //should return comment_count of 11
+        .expect(200)
+        .then(({ body }) => {
+          expect(body).toEqual(
+            expect.objectContaining({
+              comment_count: '11',
+            }),
+          )
+        })
     })
   })
 })
