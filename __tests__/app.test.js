@@ -58,8 +58,8 @@ describe('app', () => {
         .patch('/api/articles/12')
         .send(voteUpdate)
         .expect(400)
-        .then((response) => {
-          expect(response.text).toBe('Bad request')
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request')
         })
     })
 
@@ -69,8 +69,8 @@ describe('app', () => {
         .patch('/api/articles/99999')
         .send(voteUpdate)
         .expect(404)
-        .then((response) => {
-          expect(response.text).toBe('Path not found')
+        .then(({ body }) => {
+          expect(body.msg).toBe('Path not found')
         })
     })
 
@@ -80,8 +80,8 @@ describe('app', () => {
         .patch('/api/articles/banana')
         .send(voteUpdate)
         .expect(400)
-        .then((response) => {
-          expect(response.text).toBe('Bad request')
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request')
         })
     })
 
@@ -91,8 +91,8 @@ describe('app', () => {
         .patch('/api/articles/1')
         .send(voteUpdate)
         .expect(200)
-        .then((response) => {
-          expect(response.body.article).toEqual({
+        .then(({ body }) => {
+          expect(body.article).toEqual({
             article_id: 1,
             title: `Living in the shadow of a great man`,
             topic: `mitch`,
