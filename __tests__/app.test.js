@@ -232,5 +232,19 @@ describe('app', () => {
           )
         })
     })
+
+    test('status 400 - bad request', () => {
+      return request(app)
+        .get('/api/articles/banana')
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toEqual('Bad request'))
+    })
+
+    test('status 404 - Article not found', () => {
+      return request(app)
+        .get('/api/articles/999999999')
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toEqual('Article not found'))
+    })
   })
 })
