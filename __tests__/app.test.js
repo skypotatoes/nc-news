@@ -247,4 +247,30 @@ describe('app', () => {
         .then(({ body }) => expect(body.msg).toEqual('Article not found'))
     })
   })
+
+  describe('POST /api/articles/:article_id/comments', () => {
+    test('status 201 - responds with the posted comment', () => {
+      const testComment = { username: 'lurker', body: "What's up, doc?" }
+      return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(201)
+        .then(({ body }) => {
+          console.log(body)
+          expect(body).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(Number),
+              article_id: 2,
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: 'lurker',
+              body: "What's up, doc?",
+            }),
+          )
+        })
+    })
+    // test('status 201 - responds with the posted comment', () => {
+
+    // })
+  })
 })

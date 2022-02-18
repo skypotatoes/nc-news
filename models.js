@@ -16,7 +16,7 @@ exports.fetchArticleById = (articleID) => {
   return db
     .query(
       `
-    SELECT * FROM articles WHERE article_id = $1`,
+    SELECT * FROM articles WHERE article_id = $1;`,
       [articleID],
     )
     .then((results) => results.rows)
@@ -26,7 +26,7 @@ exports.fetchUsers = () => {
   return db
     .query(
       `
-  SELECT username FROM users
+  SELECT username FROM users;
   `,
     )
     .then((results) => results.rows)
@@ -57,7 +57,7 @@ exports.fetchArticleById = (articleID) => {
       INNER JOIN comments
       ON articles.article_id = comments.article_id
       WHERE articles.article_id=$1
-      GROUP BY articles.article_id`,
+      GROUP BY articles.article_id;`,
       [articleID],
     )
     .then((results) => {
@@ -85,11 +85,30 @@ exports.fetchArticles = () => {
   return db
     .query(
       `
-    SELECT author, title, article_id, topic, created_at, votes FROM articles
+    SELECT author, title, article_id, topic, created_at, votes FROM articles;
   `,
     )
 
     .then((results) => {
       return results.rows
+    })
+}
+
+exports.insertComment = (articleId, comment) => {
+  const author = comment.username
+  const body = comment.body
+  const id = Number(articleId)
+  console.log(typeof author, typeof body, typeof id)
+  return db
+    .query(
+      `
+    INSERT INTO comments
+    (author, body, article_id)
+    VALUES
+    ($1, $2, $3) RETURNING *;`,
+      [author, body, id],
+    )
+    .then((results) => {
+      return results.rows[0]
     })
 }

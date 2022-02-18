@@ -5,6 +5,7 @@ const {
   fetchArticles,
   fetchUsers,
   fetchCommentsByArticleId,
+  insertComment,
 } = require('./models')
 
 exports.getTopics = (req, res, next) => {
@@ -97,4 +98,15 @@ exports.getCommentsByArticleId = (req, res, next) => {
       res.status(200).send(comments)
     })
     .catch(next)
+}
+
+exports.postComment = (req, res, next) => {
+  const articleId = req.params.article_id
+  const newComment = req.body
+  insertComment(articleId, newComment)
+    .then((comment) => {
+      console.log(comment)
+      res.status(201).send(comment)
+    })
+    .catch((err) => console.log(err))
 }
