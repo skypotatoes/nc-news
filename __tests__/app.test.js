@@ -121,28 +121,6 @@ describe('app', () => {
     })
   })
 
-  describe('GET /api/articles/:article_id', () => {
-    test('status 200 - responds with an article object with appropriate properties', () => {
-      return request(app)
-        .get('/api/articles/9')
-        .expect(200)
-        .then(({ body }) => {
-          //   console.log(body)
-          expect(body).toEqual(
-            expect.objectContaining({
-              article_id: 9,
-              title: "They're not exactly dogs, are they?",
-              topic: 'mitch',
-              author: 'butter_bridge',
-              body: 'Well? Think about it.',
-              created_at: '2020-06-06T09:10:00.000Z',
-              votes: 0,
-            }),
-          )
-        })
-    })
-  })
-
   describe('GET /api/users', () => {
     test('status 200 - responds with an array of objects with username property', () => {
       return request(app)
@@ -216,6 +194,25 @@ describe('app', () => {
               }),
             )
           })
+        })
+    })
+
+    test('status 404 - Article not found', () => {
+      return request(app)
+        .get('/api/articles/999999/comments')
+        .expect(404)
+        .then(({ body }) => {
+          // console.log(body)
+          expect(body.msg).toEqual('Article not found')
+        })
+    })
+
+    test('status 400 - Bad request', () => {
+      return request(app)
+        .get('/api/articles/banana/comments')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Bad request')
         })
     })
   })

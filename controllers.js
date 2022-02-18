@@ -75,15 +75,28 @@ exports.getArticleById = (req, res, next) => {
   const ArticleId = req.params.article_id
   fetchArticleById(ArticleId)
     .then((article) => {
-      //        console.log(article[0])
-      res.status(200).send(article[0])
+      res.status(200).send(article)
     })
-    .catch(next)
+    .catch((error) => {
+      console.log(error)
+    })
 }
 
 exports.getCommentsByArticleId = (req, res, next) => {
-  const ArticleId = req.params.article_id
-  fetchCommentsByArticleId(ArticleId).then((comments) => {
-    res.status(200).send(comments)
-  })
+  const ArticleId = Number(req.params.article_id)
+
+  if (isNaN(ArticleId)) {
+    return res.status(400).send({ msg: 'Bad request' })
+  }
+
+  return Promise.all([
+    fetchArticleById(ArticleId),
+    fetchCommentsByArticleId(ArticleId),
+  ])
+
+    .then((promises) => {
+      const comments = promises[1]
+      res.status(200).send(comments)
+    })
+    .catch(next)
 }

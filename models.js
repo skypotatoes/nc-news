@@ -60,15 +60,21 @@ exports.fetchArticleById = (articleID) => {
       GROUP BY articles.article_id`,
       [articleID],
     )
-    .then((results) => results.rows)
+    .then((results) => {
+      // console.log(results.rows)
+      if (results.rows.length === 0) {
+        return Promise.reject({ status: 404, msg: 'Article not found' })
+      }
+      return results.rows[0]
+    })
 }
 
-exports.fetchCommentsByArticleId = (articleID) => {
+exports.fetchCommentsByArticleId = (articleId) => {
   return db
     .query(
       `
           SELECT * FROM comments WHERE article_id = $1`,
-      [articleID],
+      [articleId],
     )
     .then((results) => {
       return results.rows
