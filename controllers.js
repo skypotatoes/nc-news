@@ -77,9 +77,7 @@ exports.getArticleById = (req, res, next) => {
     .then((article) => {
       res.status(200).send(article)
     })
-    .catch((error) => {
-      console.log(error)
-    })
+    .catch(next)
 }
 
 exports.getCommentsByArticleId = (req, res, next) => {
