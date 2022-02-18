@@ -30,11 +30,6 @@ describe('app', () => {
         })
     })
   })
-  describe('GET /bad-pathway', () => {
-    test('status 404 - path not found', () => {
-      return request(app).get('/bad-pathway').expect(404)
-    })
-  })
 
   describe('PATCH /api/articles/:article_id', () => {
     test('status 200 - responds with updated article', () => {
@@ -161,17 +156,6 @@ describe('app', () => {
               }),
             ),
           )
-        })
-    })
-  })
-
-  describe('GET /bad-pathway', () => {
-    test('status 404 - path not found', () => {
-      return request(app)
-        .get('/bad-pathway')
-        .expect(404)
-        .then(({ body }) => {
-          expect(body.msg).toEqual('Path not found')
         })
     })
   })
