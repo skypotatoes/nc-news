@@ -8,6 +8,7 @@ const {
   getCommentsByArticleId,
   getArticles,
   getUsers,
+  postComment,
 } = require('./controllers')
 
 app.use(express.json())
@@ -22,6 +23,8 @@ app.get('/api/users', getUsers)
 
 app.patch('/api/articles/:article_id', patchVotesByArticleId)
 
+app.post('/api/articles/:article_id/comments', postComment)
+
 app.all('/*', (req, res) => {
   res.status(404).send({ msg: 'Path not found' })
 })
@@ -29,8 +32,10 @@ app.all('/*', (req, res) => {
 app.use((err, req, res, next) => {
   if (err.status && err.msg) {
     res.status(err.status).send({ msg: err.msg })
-  } else if (err.code === '22P02') {
+  } else if (err.code === '22P02' || err.code === '23502') {
     res.status(400).send({ msg: 'Bad request' })
+  } else if (err.code === '23503') {
+    res.status(404).send({ msg: 'Article not found' })
   }
 })
 
