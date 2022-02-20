@@ -105,8 +105,7 @@ exports.postComment = (req, res, next) => {
   const newComment = req.body
   insertComment(articleId, newComment)
     .then((comment) => {
-      console.log(comment)
       res.status(201).send(comment)
     })
-    .catch((err) => console.log(err))
+    .catch(next)
 }

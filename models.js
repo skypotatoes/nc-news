@@ -98,7 +98,6 @@ exports.insertComment = (articleId, comment) => {
   const author = comment.username
   const body = comment.body
   const id = Number(articleId)
-  console.log(typeof author, typeof body, typeof id)
   return db
     .query(
       `

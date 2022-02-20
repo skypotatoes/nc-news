@@ -256,7 +256,6 @@ describe('app', () => {
         .send(testComment)
         .expect(201)
         .then(({ body }) => {
-          console.log(body)
           expect(body).toEqual(
             expect.objectContaining({
               comment_id: expect.any(Number),
@@ -269,8 +268,38 @@ describe('app', () => {
           )
         })
     })
-    // test('status 201 - responds with the posted comment', () => {
 
-    // })
+    test('status 400 - bad request when username or body missing', () => {
+      const testComment = { losername: 'lurker', boady: 'Yodelayeehoo' }
+      return request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toEqual('Bad request'))
+    })
+
+    test('status 400 - bad request for invalid article id', () => {
+      const testComment = {
+        username: 'lurker',
+        body: 'I use my body like a temple',
+      }
+      return request(app)
+        .post('/api/articles/banana/comments')
+        .send(testComment)
+        .expect(400)
+        .then(({ body }) => expect(body.msg).toEqual('Bad request'))
+    })
+
+    test('status 404 - article not found', () => {
+      const testComment = {
+        username: 'lurker',
+        body: "this isn't bananas",
+      }
+      return request(app)
+        .post('/api/articles/999999999/comments')
+        .send(testComment)
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toEqual('Article not found'))
+    })
   })
 })
