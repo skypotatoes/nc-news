@@ -74,7 +74,8 @@ exports.fetchArticles = (query) => {
   let col = `created_at`
   let order = 'DESC'
 
-  const validOrders = ['asc']['desc']
+  const validTopics = ['mitch', 'cats', 'paper']
+
   const greenList = [
     `author`,
     `title`,
@@ -96,26 +97,32 @@ exports.fetchArticles = (query) => {
   if (query.order === 'asc') {
     order = 'ASC'
   }
-  // console.log(query.order.toUpperCase())
-  // console.log(validOrders.includes(query.order))
-  // if (validOrders.includes(query.order)) {
-  //   console.log('HEY')
-  //   console.log(validOrders.includes(query.order))
-  // }
 
-  //   order = query.order.toUpperCase()
-  //   console.log(order)
-  // }
+  let queryString = `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
+  FROM articles
+  LEFT OUTER JOIN comments
+  ON articles.article_id = comments.article_id`
+
+  if (validTopics.includes(query.topic)) {
+    queryString += ` WHERE articles.topic = '${query.topic}'`
+  }
+
+  queryString += ` GROUP BY articles.article_id
+  ORDER BY ${col} ${order}`
 
   return db
     .query(
-      //SELECT author, title, article_id, topic, created_at, votes FROM articles;
-      `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
-    FROM articles
-    LEFT OUTER JOIN comments
-    ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id
-    ORDER BY ${col} ${order};`,
+      queryString,
+      //   //SELECT author, title, article_id, topic, created_at, votes FROM articles;
+      //   `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
+      // FROM articles
+      // LEFT OUTER JOIN comments
+      // ON articles.article_id = comments.article_id
+
+      // GROUP BY articles.article_id
+      // ORDER BY ${col} ${order}
+
+      // ;`,
     )
     .then((results) => {
       return results.rows

@@ -136,7 +136,7 @@ describe('app', () => {
     })
   })
 
-  describe.only('GET /api/articles/', () => {
+  describe('GET /api/articles/', () => {
     test('status 200 - responds with an articles array of article objects', () => {
       return request(app)
         .get('/api/articles')
@@ -226,6 +226,26 @@ describe('app', () => {
           expect(articles).toBeSortedBy('article_id', {
             coerce: true,
             descending: false,
+          })
+        })
+    })
+
+    test('status 200 - accepts topic', () => {
+      return request(app)
+        .get('/api/articles?sort_by=article_id&order=asc&topic=mitch')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeSortedBy('article_id', {
+            coerce: true,
+            descending: false,
+          })
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                topic: 'mitch',
+              }),
+            )
           })
         })
     })
