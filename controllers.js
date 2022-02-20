@@ -53,7 +53,6 @@ exports.patchVotesByArticleId = (req, res, next) => {
 exports.getArticleById = (req, res, next) => {
   const ArticleId = req.params.article_id
   fetchArticleById(ArticleId).then((article) => {
-    //        console.log(article[0])
     res.status(200).send(article[0])
   })
 }

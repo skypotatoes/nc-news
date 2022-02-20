@@ -158,6 +158,24 @@ describe('app', () => {
           )
         })
     })
+
+    test('status 200 - each article object includes comment_count', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeInstanceOf(Array)
+          expect(articles).toHaveLength(12)
+          articles.forEach((article) =>
+            expect(article).toEqual(
+              expect.objectContaining({
+                comment_count: expect.any(String),
+              }),
+            ),
+          )
+        })
+    })
   })
 
   describe('GET /api/articles/:article_id/comments', () => {
