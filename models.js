@@ -12,16 +12,6 @@ exports.fetchTopics = () => {
     })
 }
 
-// exports.fetchArticleById = (articleID) => {
-//   return db
-//     .query(
-//       `
-//     SELECT * FROM articles WHERE article_id = $1;`,
-//       [articleID],
-//     )
-//     .then((results) => results.rows)
-// }
-
 exports.fetchUsers = () => {
   return db
     .query(
@@ -80,7 +70,43 @@ exports.fetchCommentsByArticleId = (articleId) => {
     })
 }
 
-exports.fetchArticles = () => {
+exports.fetchArticles = (query) => {
+  let col = `created_at`
+  let order = 'DESC'
+
+  const validOrders = ['asc']['desc']
+  const greenList = [
+    `author`,
+    `title`,
+    `article_id`,
+    `topic`,
+    `created_at`,
+    `votes`,
+    `comment_count`,
+  ]
+
+  if (query.sort_by && !greenList.includes(query.sort_by)) {
+    return Promise.reject({ status: 400, msg: 'Bad request' })
+  }
+
+  if (query.sort_by) {
+    col = query.sort_by
+  }
+
+  if (query.order === 'asc') {
+    order = 'ASC'
+  }
+  // console.log(query.order.toUpperCase())
+  // console.log(validOrders.includes(query.order))
+  // if (validOrders.includes(query.order)) {
+  //   console.log('HEY')
+  //   console.log(validOrders.includes(query.order))
+  // }
+
+  //   order = query.order.toUpperCase()
+  //   console.log(order)
+  // }
+
   return db
     .query(
       //SELECT author, title, article_id, topic, created_at, votes FROM articles;
@@ -88,7 +114,8 @@ exports.fetchArticles = () => {
     FROM articles
     LEFT OUTER JOIN comments
     ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id;`,
+    GROUP BY articles.article_id
+    ORDER BY ${col} ${order};`,
     )
     .then((results) => {
       return results.rows
