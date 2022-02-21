@@ -12,16 +12,6 @@ exports.fetchTopics = () => {
     })
 }
 
-// exports.fetchArticleById = (articleID) => {
-//   return db
-//     .query(
-//       `
-//     SELECT * FROM articles WHERE article_id = $1;`,
-//       [articleID],
-//     )
-//     .then((results) => results.rows)
-// }
-
 exports.fetchUsers = () => {
   return db
     .query(
@@ -80,15 +70,66 @@ exports.fetchCommentsByArticleId = (articleId) => {
     })
 }
 
-exports.fetchArticles = () => {
+exports.fetchArticles = (query) => {
+  let col = `created_at`
+  let order = 'DESC'
+
+  const validOrders = ['ASC', 'DESC']
+
+  const validTopics = ['mitch', 'cats', 'paper']
+
+  const greenList = [
+    `author`,
+    `title`,
+    `article_id`,
+    `topic`,
+    `created_at`,
+    `votes`,
+    `comment_count`,
+  ]
+
+  //all this validation should take place in the controllers
+  if (query.sort_by && !greenList.includes(query.sort_by)) {
+    return Promise.reject({ status: 400, msg: 'Bad request' })
+  }
+
+  if (query.sort_by) {
+    col = query.sort_by
+  }
+
+  if (query.order && !validOrders.includes(query.order.toUpperCase())) {
+    return Promise.reject({ status: 400, msg: 'Bad request' })
+  }
+
+  if (query.order === 'asc') {
+    order = 'ASC'
+  }
+
+  let queryString = `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
+  FROM articles
+  LEFT OUTER JOIN comments
+  ON articles.article_id = comments.article_id`
+
+  if (validTopics.includes(query.topic)) {
+    queryString += ` WHERE articles.topic = '${query.topic}'`
+  }
+
+  queryString += ` GROUP BY articles.article_id
+  ORDER BY ${col} ${order}`
+
   return db
     .query(
-      //SELECT author, title, article_id, topic, created_at, votes FROM articles;
-      `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
-    FROM articles
-    LEFT OUTER JOIN comments
-    ON articles.article_id = comments.article_id
-    GROUP BY articles.article_id;`,
+      queryString,
+      //   //SELECT author, title, article_id, topic, created_at, votes FROM articles;
+      //   `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
+      // FROM articles
+      // LEFT OUTER JOIN comments
+      // ON articles.article_id = comments.article_id
+
+      // GROUP BY articles.article_id
+      // ORDER BY ${col} ${order}
+
+      // ;`,
     )
     .then((results) => {
       return results.rows

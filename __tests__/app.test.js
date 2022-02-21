@@ -4,6 +4,7 @@ const app = require('../app')
 const request = require('supertest')
 const data = require('../db/data/test-data/index')
 const db = require('../db/connection')
+const sorted = require('jest-sorted')
 
 afterAll(() => db.end())
 
@@ -174,6 +175,96 @@ describe('app', () => {
               }),
             ),
           )
+        })
+    })
+
+    test('status 200 - default sorts to date descending ', () => {
+      return request(app)
+        .get('/api/articles')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeInstanceOf(Array)
+          expect(articles).toHaveLength(12)
+          expect(articles).toBeSortedBy('created_at', {
+            coerce: true,
+            descending: true,
+          })
+        })
+    })
+
+    test('status 200 - accepts sort_by', () => {
+      return request(app)
+        .get('/api/articles?sort_by=title')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeInstanceOf(Array)
+          expect(articles).toHaveLength(12)
+          expect(articles).toBeSortedBy('title', {
+            coerce: false,
+            descending: true,
+          })
+        })
+    })
+
+    test('status 400 - bad request when sort_by is invalid', () => {
+      return request(app)
+        .get('/api/articles?sort_by=pineapple')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toBe('Bad request')
+        })
+    })
+
+    test('status 200 - accepts order asc/desc', () => {
+      return request(app)
+        .get('/api/articles?sort_by=article_id&order=asc')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeSortedBy('article_id', {
+            coerce: true,
+            descending: false,
+          })
+        })
+    })
+
+    test('status 400 - bad request when order invalid', () => {
+      return request(app)
+        .get('/api/articles?sort_by=title&order=gobbledegook')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Bad request')
+        })
+    })
+
+    test('status 200 - accepts topic', () => {
+      return request(app)
+        .get('/api/articles?sort_by=article_id&order=asc&topic=mitch')
+        .expect(200)
+        .then(({ body }) => {
+          const { articles } = body
+          expect(articles).toBeSortedBy('article_id', {
+            coerce: true,
+            descending: false,
+          })
+          articles.forEach((article) => {
+            expect(article).toEqual(
+              expect.objectContaining({
+                topic: 'mitch',
+              }),
+            )
+          })
+        })
+    })
+
+    test('status 404 - Topic not found', () => {
+      return request(app)
+        .get('/api/articles?topic=tinned_peas')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Topic not found')
         })
     })
   })

@@ -66,9 +66,27 @@ exports.getUsers = (req, res, next) => {
 }
 
 exports.getArticles = (req, res, next) => {
-  fetchArticles().then((articles) => {
-    res.status(200).send({ articles })
-  })
+  const query = req.query
+
+  if (req.query.topic) {
+    fetchTopics()
+      .then((topics) => {
+        const arrSlugs = []
+        topics.forEach((topic) => {
+          arrSlugs.push(topic.slug)
+        })
+        if (!arrSlugs.includes(req.query.topic)) {
+          return Promise.reject({ status: 404, msg: 'Topic not found' })
+        }
+      })
+      .catch(next)
+  }
+
+  fetchArticles(query)
+    .then((articles) => {
+      res.status(200).send({ articles })
+    })
+    .catch(next)
 }
 
 exports.getArticleById = (req, res, next) => {
