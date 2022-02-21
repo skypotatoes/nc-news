@@ -67,6 +67,24 @@ exports.getUsers = (req, res, next) => {
 
 exports.getArticles = (req, res, next) => {
   const query = req.query
+
+  console.log(req.query)
+  console.log(req.query.topic)
+
+  if (req.query.topic) {
+    fetchTopics()
+      .then((topics) => {
+        const arrSlugs = []
+        topics.forEach((topic) => {
+          arrSlugs.push(topic.slug)
+        })
+        if (!arrSlugs.includes(req.query.topic)) {
+          return Promise.reject({ status: 404, msg: 'Topic not found' })
+        }
+      })
+      .catch(next)
+  }
+
   fetchArticles(query)
     .then((articles) => {
       res.status(200).send({ articles })

@@ -136,7 +136,7 @@ describe('app', () => {
     })
   })
 
-  describe('GET /api/articles/', () => {
+  describe.only('GET /api/articles/', () => {
     test('status 200 - responds with an articles array of article objects', () => {
       return request(app)
         .get('/api/articles')
@@ -230,6 +230,15 @@ describe('app', () => {
         })
     })
 
+    test('status 400 - bad request when order invalid', () => {
+      return request(app)
+        .get('/api/articles?sort_by=title&order=gobbledegook')
+        .expect(400)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Bad request')
+        })
+    })
+
     test('status 200 - accepts topic', () => {
       return request(app)
         .get('/api/articles?sort_by=article_id&order=asc&topic=mitch')
@@ -249,7 +258,17 @@ describe('app', () => {
           })
         })
     })
+
+    test('status 404 - Topic not found', () => {
+      return request(app)
+        .get('/api/articles?topic=tinned_peas')
+        .expect(404)
+        .then(({ body }) => {
+          expect(body.msg).toEqual('Topic not found')
+        })
+    })
   })
+
   describe('GET /api/articles/:article_id/comments', () => {
     test('status 200 - responds with array of comments with appropriate properties', () => {
       return request(app)

@@ -74,6 +74,8 @@ exports.fetchArticles = (query) => {
   let col = `created_at`
   let order = 'DESC'
 
+  const validOrders = ['ASC', 'DESC']
+
   const validTopics = ['mitch', 'cats', 'paper']
 
   const greenList = [
@@ -92,6 +94,10 @@ exports.fetchArticles = (query) => {
 
   if (query.sort_by) {
     col = query.sort_by
+  }
+
+  if (query.order && !validOrders.includes(query.order.toUpperCase())) {
+    return Promise.reject({ status: 400, msg: 'Bad request' })
   }
 
   if (query.order === 'asc') {
