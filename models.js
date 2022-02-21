@@ -88,6 +88,7 @@ exports.fetchArticles = (query) => {
     `comment_count`,
   ]
 
+  //all this validation should take place in the controllers
   if (query.sort_by && !greenList.includes(query.sort_by)) {
     return Promise.reject({ status: 400, msg: 'Bad request' })
   }

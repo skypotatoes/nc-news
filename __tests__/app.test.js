@@ -136,7 +136,7 @@ describe('app', () => {
     })
   })
 
-  describe.only('GET /api/articles/', () => {
+  describe('GET /api/articles/', () => {
     test('status 200 - responds with an articles array of article objects', () => {
       return request(app)
         .get('/api/articles')

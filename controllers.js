@@ -68,9 +68,6 @@ exports.getUsers = (req, res, next) => {
 exports.getArticles = (req, res, next) => {
   const query = req.query
 
-  console.log(req.query)
-  console.log(req.query.topic)
-
   if (req.query.topic) {
     fetchTopics()
       .then((topics) => {
