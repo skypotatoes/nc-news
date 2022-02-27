@@ -417,7 +417,6 @@ describe('app', () => {
         username: 'lurker',
         body: 'This is a test comment, blah blah blah blah, delet this!!!',
       }
-      let testCommentId
       request(app)
         .post('/api/articles/2/comments')
         .send(testComment)

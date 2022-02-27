@@ -153,3 +153,7 @@ exports.insertComment = (articleId, comment) => {
       return results.rows[0]
     })
 }
+
+exports.removeCommentById = (commentId) => {
+  return db.Q
+}
