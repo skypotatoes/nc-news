@@ -126,3 +126,8 @@ exports.postComment = (req, res, next) => {
     })
     .catch(next)
 }
+
+exports.deleteCommentById = (req, res, next) => {
+  const commentId = req.params.comment_id
+  removeCommentById(commentId).then(() => res.status(204))
+}

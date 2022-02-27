@@ -411,4 +411,20 @@ describe('app', () => {
         .then(({ body }) => expect(body.msg).toEqual('Article not found'))
     })
   })
+  describe('DELETE /api/comment/:comment_id', () => {
+    test('delete the given comment by comment_id', () => {
+      const testComment = {
+        username: 'lurker',
+        body: 'This is a test comment, blah blah blah blah, delet this!!!',
+      }
+      let testCommentId
+      request(app)
+        .post('/api/articles/2/comments')
+        .send(testComment)
+        .expect(201)
+        .then(({ body }) => (testCommentId = body.comment_id))
+
+      return request(app).delete(`/api/comment/${testCommentId}`).expect(204)
+    })
+  })
 })
