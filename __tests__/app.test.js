@@ -413,17 +413,13 @@ describe('app', () => {
   })
   describe('DELETE /api/comment/:comment_id', () => {
     test('delete the given comment by comment_id', () => {
-      const testComment = {
-        username: 'lurker',
-        body: 'This is a test comment, blah blah blah blah, delet this!!!',
-      }
-      request(app)
-        .post('/api/articles/2/comments')
-        .send(testComment)
-        .expect(201)
-        .then(({ body }) => (testCommentId = body.comment_id))
-
-      return request(app).delete(`/api/comment/${testCommentId}`).expect(204)
+      return request(app).delete(`/api/comment/2`).expect(204)
+    })
+    test('status 404 - comment not found', () => {
+      return request(app)
+        .delete(`/api/comment/999999`)
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toEqual('Comment not found'))
     })
   })
 })

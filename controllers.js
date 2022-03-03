@@ -6,6 +6,7 @@ const {
   fetchUsers,
   fetchCommentsByArticleId,
   insertComment,
+  removeCommentById,
 } = require('./models')
 
 exports.getTopics = (req, res, next) => {
@@ -128,8 +129,15 @@ exports.postComment = (req, res, next) => {
 }
 
 exports.deleteCommentById = (req, res, next) => {
+  console.log('delete comment activated')
   const commentId = req.params.comment_id
   removeCommentById(commentId)
-    .then((comment) => res.status(204))
+    .then((comment) => {
+      if (comment.length === 0) {
+        res.status(404).send({ msg: 'Comment not found' })
+      } else {
+        res.status(204).send({})
+      }
+    })
     .catch(next)
 }
