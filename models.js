@@ -153,3 +153,18 @@ exports.insertComment = (articleId, comment) => {
       return results.rows[0]
     })
 }
+
+exports.removeCommentById = (commentId) => {
+  return db
+    .query(
+      `
+    DELETE FROM comments
+    WHERE comment_id=$1
+    RETURNING *;
+  `,
+      [commentId],
+    )
+    .then((results) => {
+      return results.rows
+    })
+}

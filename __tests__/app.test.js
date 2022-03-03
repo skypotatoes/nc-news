@@ -411,4 +411,15 @@ describe('app', () => {
         .then(({ body }) => expect(body.msg).toEqual('Article not found'))
     })
   })
+  describe('DELETE /api/comment/:comment_id', () => {
+    test('delete the given comment by comment_id', () => {
+      return request(app).delete(`/api/comment/2`).expect(204)
+    })
+    test('status 404 - comment not found', () => {
+      return request(app)
+        .delete(`/api/comment/999999`)
+        .expect(404)
+        .then(({ body }) => expect(body.msg).toEqual('Comment not found'))
+    })
+  })
 })
