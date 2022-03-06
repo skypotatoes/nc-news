@@ -98,7 +98,7 @@ exports.getCommentsByArticleId = (req, res, next) => {
 
     .then((promises) => {
       const comments = promises[1]
-      res.status(200).send(comments)
+      res.status(200).send({ comments: comments })
     })
     .catch(next)
 }
@@ -114,7 +114,6 @@ exports.postComment = (req, res, next) => {
 }
 
 exports.deleteCommentById = (req, res, next) => {
-  console.log('delete comment activated')
   const commentId = req.params.comment_id
   removeCommentById(commentId)
     .then((comment) => {
