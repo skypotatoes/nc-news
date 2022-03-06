@@ -10,10 +10,12 @@ const {
   getUsers,
   postComment,
   deleteCommentById,
+  getApi,
 } = require('./controllers')
 
 app.use(express.json())
 
+app.get('/api', getApi)
 app.get('/api/topics', getTopics)
 app.get('/api/articles', getArticles)
 app.get('/api/articles/:article_id', getArticleById)

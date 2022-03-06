@@ -9,6 +9,8 @@ const {
   removeCommentById,
 } = require('./models')
 
+const endpoints = require('./endpoints.json')
+
 exports.getTopics = (req, res, next) => {
   fetchTopics()
     .then((topics) => {
@@ -124,4 +126,8 @@ exports.deleteCommentById = (req, res, next) => {
       }
     })
     .catch(next)
+}
+
+exports.getApi = (req, res, next) => {
+  return res.status(200).send(endpoints)
 }

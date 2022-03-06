@@ -422,4 +422,16 @@ describe('app', () => {
         .then(({ body }) => expect(body.msg).toEqual('Comment not found'))
     })
   })
+  describe('GET /api', () => {
+    test('returns endpoint.json', () => {
+      const endpoints = require('../endpoints.json')
+      console.log()
+      return request(app)
+        .get('/api')
+        .expect(200)
+        .then((response) => {
+          expect(response.body).toEqual(endpoints)
+        })
+    })
+  })
 })
