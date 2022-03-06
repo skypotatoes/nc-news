@@ -17,14 +17,6 @@ exports.getTopics = (req, res, next) => {
     .catch(next)
 }
 
-exports.getArticleById = (req, res, next) => {
-  const ArticleId = req.params.article_id
-  fetchArticleById(ArticleId).then((article) => {
-    //        console.log(article[0])
-    res.status(200).send(article[0])
-  })
-}
-
 exports.patchVotesByArticleId = (req, res, next) => {
   let votes = req.body.inc_votes
   const id = Number(req.params.article_id)
@@ -49,13 +41,6 @@ exports.patchVotesByArticleId = (req, res, next) => {
       res.status(200).send({ article: article[0] })
     })
     .catch(next)
-}
-
-exports.getArticleById = (req, res, next) => {
-  const ArticleId = req.params.article_id
-  fetchArticleById(ArticleId).then((article) => {
-    res.status(200).send(article[0])
-  })
 }
 
 exports.getUsers = (req, res, next) => {
@@ -94,7 +79,7 @@ exports.getArticleById = (req, res, next) => {
   const ArticleId = req.params.article_id
   fetchArticleById(ArticleId)
     .then((article) => {
-      res.status(200).send(article)
+      res.status(200).send({ article: article })
     })
     .catch(next)
 }

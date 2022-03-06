@@ -316,7 +316,7 @@ describe('app', () => {
         .get('/api/articles/9')
         .expect(200)
         .then(({ body }) => {
-          expect(body).toEqual(
+          expect(body.article).toEqual(
             expect.objectContaining({
               article_id: 9,
               title: "They're not exactly dogs, are they?",
@@ -334,7 +334,7 @@ describe('app', () => {
         .get('/api/articles/1') //should return comment_count of 11
         .expect(200)
         .then(({ body }) => {
-          expect(body).toEqual(
+          expect(body.article).toEqual(
             expect.objectContaining({
               comment_count: '11',
             }),
