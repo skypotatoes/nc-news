@@ -274,9 +274,9 @@ describe('app', () => {
       return request(app)
         .get('/api/articles/1/comments')
         .expect(200)
-        .then(({ body: comments }) => {
-          expect(comments).toHaveLength(11)
-          comments.forEach((comment) => {
+        .then(({ body }) => {
+          expect(body.comments).toHaveLength(11)
+          body.comments.forEach((comment) => {
             expect(comment).toEqual(
               expect.objectContaining({
                 comment_id: expect.any(Number),
