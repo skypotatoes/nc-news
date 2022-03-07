@@ -76,7 +76,7 @@ exports.fetchArticles = (query) => {
 
   const validOrders = ['ASC', 'DESC']
 
-  const validTopics = ['mitch', 'cats', 'paper']
+  const validTopics = ['cooking', 'coding', 'football']
 
   const greenList = [
     `author`,
