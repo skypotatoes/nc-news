@@ -69,7 +69,7 @@
   },
 
   "PATCH /api/articles/:article_id/": {
-    "description": "responds with updated vote count when request body is an object with key of 'vote_incr' and a number representing how many votes to add",
+    "description": "responds with updated vote count when request body is an object with key of 'inc_votes' and a number representing how many votes to add",
     "queries": [],
     "ExampleResponse": {
       "article": {
