@@ -7,18 +7,10 @@ This is a News Service API which allows the posting of articles and comments to 
 To clone this repo, use the following terminal command:
 `git clone https://github.com/skypotatoes/be-nc-news.git`
 
-You will also need to install dotenv, express and postgreSQL dependencies with the following terminal commands:
+You will also need to install dependencies with the following terminal commands:
 
 ```
-npm i dotenv
-```
-
-```
-npm i express
-```
-
-```
-npm i pg
+npm i
 ```
 
 To connect to the databases, you will need to add .env.development and .env.test files

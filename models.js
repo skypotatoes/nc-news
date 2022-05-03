@@ -62,7 +62,8 @@ exports.fetchCommentsByArticleId = (articleId) => {
   return db
     .query(
       `
-          SELECT comment_id, body, author, votes, created_at FROM comments WHERE article_id = $1`,
+          SELECT comment_id, body, author, votes, created_at FROM comments WHERE article_id = $1
+          ORDER BY created_at ASC`,
       [articleId],
     )
     .then((results) => {
